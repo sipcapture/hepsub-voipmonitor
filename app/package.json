@@ -1,0 +1,18 @@
+{
+  "name": "hepsub-voipmonitor",
+  "version": "1.0.0",
+  "description": "HEP pubsub API for Voipmonitor OSS Sniffer",
+  "main": "voipmonitor.js",
+  "scripts": {
+    "start": "node voipmonitor.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4",
+    "find": "^0.2.9",
+    "req-fast": "^0.2.17",
+    "uuid": "^3.3.2"
+  }
+}
