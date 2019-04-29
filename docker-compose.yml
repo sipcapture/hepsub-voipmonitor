@@ -1,12 +1,16 @@
 version: '3.1'
 
 services:
-
   voipmonitor-sniffer:
-    container_name: voipmonitor-sniffer
+    container_name: voipmonitor-hep
     image: sipcapture/hepsub-voipmonitor
     network_mode: "host"
     restart: always
+    environment:
+      - PUBLIC_IP=${PUBLIC_IP:-voipmonitor-hep}
+      - HOMER_IP=${HOMER_IP:-homer-webapp}
+    ports:
+      - "18088:18088/tcp"
     volumes:
       - ./voipmonitor:/var/spool/voipmonitor
 

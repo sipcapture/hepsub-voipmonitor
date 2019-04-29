@@ -26,7 +26,7 @@ ENV VERSION 1091082768
 COPY ./app /app
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
  && apt-get install -y nodejs \
- && cd /app && npm install
+ && cd /app && npm install && npm install -g pm2
 
 COPY ./voipmonitor.conf /etc/voipmonitor.conf
 

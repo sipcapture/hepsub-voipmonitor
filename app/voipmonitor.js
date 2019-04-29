@@ -44,19 +44,25 @@ app.get('/get/:id', function (req, res) {
 app.post('/get/:id', function (req, res) {
   var data = { params: req.params, body: req.body }
   console.log('NEW API REQ', data);
-  if (data.params.id == 'cdr' && connection){
+  if (data.params.id == 'cdr' && connection && data.body && data.body.callid){
+    data.body.callid.forEach(function(callid){
+
 	if (config.debug) console.log('NEW SEEKING CDR:',data.body.callid);
 	var q = 'SELECT * FROM cdr WHERE ID IN (SELECT cdr_id FROM cdr_next WHERE fbasename= "'+data.body.callid+'")';
 	connection.query(q, function (error, results, fields) {
 	  if (error) {
+	    console.error(error);
             res.send([])
           } else {
+	    console.log("got results",results);
 	    results.forEach(function(result){ result.callid = data.body.callid });
-	    // if (config.debug) console.log('DB LOOKUP: ', results);
+	    if (config.debug) console.log('DB LOOKUP: ', results);
             res.send(results);
 	  }
 	})
+    })
   } else if (data.params.id == 'rtp' && data.body.callid){
+    data.body.callid.forEach(function(callid){
 	if (config.debug) console.log('NEW SEEKING PCAP RTP FILE:',data.body);
 	if (data.body.callid[0]) data.body.callid = data.body.callid[0];
 	if (data.body.format[0]) data.body.format = data.body.format[0];
@@ -76,6 +82,7 @@ app.post('/get/:id', function (req, res) {
 		res.send({});
 	  }
 	})
+    })
   }
 
 })
