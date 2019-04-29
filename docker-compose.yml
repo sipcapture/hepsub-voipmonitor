@@ -4,7 +4,7 @@ services:
 
   voipmonitor-sniffer:
     container_name: voipmonitor-sniffer
-    image: qxip/hepsub-voipmonitor
+    image: sipcapture/hepsub-voipmonitor
     network_mode: "host"
     restart: always
     volumes:
