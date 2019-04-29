@@ -11,7 +11,13 @@ var config = {
 	"node": "voipmonitor",
 	"gid": 10
   },
-  "debug": true
+  "debug": true,
+  database: {
+	'host' : 'localhost',
+	'user' : 'root',
+	'password' : 'testme',
+	'database' : 'voipmonitor'
+  }
 };
 
 module.exports = config;

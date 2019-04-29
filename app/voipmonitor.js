@@ -16,15 +16,16 @@ app.use(bodyParser.json());
 var find = require('find');
 var port = config.service.port;
 var storage = "/var/spool/voipmonitor";
+var connection = false;
 
 // DB SETTINGS
 if (config.database) {
   var mysql = require('mysql');
-  var connection = mysql.createConnection(config.database);
+  connection = mysql.createConnection(config.database);
   try {
     connection.connect();
     if (config.debug) console.log('DB Connected!');
-  } catch(e) { console.log(e); }
+  } catch(e) { console.log(e); process.exit(1); }
 
 }
 
@@ -35,34 +36,27 @@ app.all('*', function(req, res, next) {
    next();
 });
 
-/*
-app.get('/get/:id', function (req, res) {
-  res.send(req.params)
-})
-*/
-
 app.post('/get/:id', function (req, res) {
-  var data = { params: req.params, body: req.body }
+  var data = { params: req.params, body: JSON.parse(JSON.stringify(req.body)) }
   console.log('NEW API REQ', data);
-  if (data.params.id == 'cdr' && connection && data.body && data.body.callid){
-    data.body.callid.forEach(function(callid){
-
-	if (config.debug) console.log('NEW SEEKING CDR:',data.body.callid);
-	var q = 'SELECT * FROM cdr WHERE ID IN (SELECT cdr_id FROM cdr_next WHERE fbasename= "'+data.body.callid+'")';
+  if (data.params.id === 'cdr' && data.body && data.body.data){
+    console.log('NEW API DEBUG', data.params.id,data.body.data);
+    data.body.data.forEach(function(callid){
+	if (config.debug) console.log('NEW SEEKING CDR:',callid);
+	var q = 'SELECT * FROM cdr WHERE ID IN (SELECT cdr_id FROM cdr_next WHERE fbasename= "'+callid+'")';
 	connection.query(q, function (error, results, fields) {
 	  if (error) {
 	    console.error(error);
             res.send([])
           } else {
 	    console.log("got results",results);
-	    results.forEach(function(result){ result.callid = data.body.callid });
+	    results.forEach(function(result){ result.callid = callid });
 	    if (config.debug) console.log('DB LOOKUP: ', results);
             res.send(results);
 	  }
 	})
     })
-  } else if (data.params.id == 'rtp' && data.body.callid){
-    data.body.callid.forEach(function(callid){
+  } else if (data.params.id == 'rtp' && data.body.data){
 	if (config.debug) console.log('NEW SEEKING PCAP RTP FILE:',data.body);
 	if (data.body.callid[0]) data.body.callid = data.body.callid[0];
 	if (data.body.format[0]) data.body.format = data.body.format[0];
@@ -82,7 +76,6 @@ app.post('/get/:id', function (req, res) {
 		res.send({});
 	  }
 	})
-    })
   }
 
 })

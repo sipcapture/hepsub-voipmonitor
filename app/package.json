@@ -1,6 +1,6 @@
 {
   "name": "hepsub-voipmonitor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "HEP pubsub API for Voipmonitor OSS Sniffer",
   "main": "voipmonitor.js",
   "scripts": {

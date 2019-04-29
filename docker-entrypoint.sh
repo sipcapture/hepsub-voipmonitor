@@ -21,6 +21,7 @@ done
 echo "Launching API... "
 cd /app
 pm2 start voipmonitor.js --watch
+pm2 logs voipmonitor &
 
 while !(voipmonitor -R -S -k --config-file=/etc/voipmonitor.conf)
 do
