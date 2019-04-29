@@ -47,7 +47,7 @@ app.post('/get/:id', function (req, res) {
 	connection.query(q, function (error, results, fields) {
 	  if (error) {
 	    console.error(error);
-            res.send([])
+            res.send(404)
           } else {
 	    console.log("got results",results);
 	    results.forEach(function(result){ result.callid = callid });
@@ -88,7 +88,7 @@ app.get('/rtpdownload/:characters?', function (req, res) {
 		if (config.debug) console.log(files);
 		var q = 'SELECT * FROM cdr WHERE ID IN (SELECT cdr_id FROM cdr_next WHERE fbasename= "'+req.query.file+'")';
 		connection.query(q, function (error, results, fields) {
-		  if (error) { res.send({}) }
+		  if (error) { res.send(404) }
 		  else {
 			  results.forEach(function(res){ res.callid = req.query.file });
 			  // if (config.debug) console.log('DB LOOKUP: ', results);
