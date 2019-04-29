@@ -11,9 +11,9 @@ var config = {
 	"node": "voipmonitor",
 	"gid": 10
   },
-  "debug": true,
+  debug: true,
   database: {
-	'host' : 'localhost',
+	'host' : '127.0.0.1',
 	'user' : 'root',
 	'password' : 'testme',
 	'database' : 'voipmonitor'

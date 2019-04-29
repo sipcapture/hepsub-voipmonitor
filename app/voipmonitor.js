@@ -25,7 +25,7 @@ if (config.database) {
   try {
     connection.connect();
     if (config.debug) console.log('DB Connected!');
-  } catch(e) { console.log(e); process.exit(1); }
+  } catch(e) { console.log(e); }
 
 }
 
@@ -39,7 +39,7 @@ app.all('*', function(req, res, next) {
 app.post('/get/:id', function (req, res) {
   var data = { params: req.params, body: JSON.parse(JSON.stringify(req.body)) }
   console.log('NEW API REQ', data);
-  if (data.params.id === 'cdr' && data.body && data.body.data){
+  if (connection && data.params.id === 'cdr' && data.body && data.body.data){
     console.log('NEW API DEBUG', data.params.id,data.body.data);
     data.body.data.forEach(function(callid){
 	if (config.debug) console.log('NEW SEEKING CDR:',callid);
