@@ -8,7 +8,9 @@ services:
     restart: always
     environment:
       - PUBLIC_IP=${PUBLIC_IP:-voipmonitor-hep}
+      - PUBLIC_PORT=${PUBLIC_PORT:-18088}
       - HOMER_IP=${HOMER_IP:-homer-webapp}
+      - HOMER_PORT=${HOMER_PORT:-9080}
     ports:
       - "18088:18088/tcp"
     volumes:
