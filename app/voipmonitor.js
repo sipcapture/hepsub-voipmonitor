@@ -43,8 +43,8 @@ app.post('/get/:id', function (req, res) {
     console.log('NEW API DEBUG', data.params.id,data.body.data);
     data.body.data.forEach(function(callid){
 	if (config.debug) console.log('NEW SEEKING CDR:',callid);
-	var q = 'SELECT * FROM cdr WHERE ID IN (SELECT cdr_id FROM cdr_next WHERE fbasename= "'+callid+'")';
-	connection.query(q, function (error, results, fields) {
+	var q = 'SELECT * FROM cdr WHERE ID IN (SELECT cdr_id FROM cdr_next WHERE fbasename = ?)';
+	connection.query(q, [callid], function (error, results, fields) {
 	  if (error) {
 	    console.error(error);
             res.send(404)
@@ -86,8 +86,8 @@ app.get('/rtpdownload/:characters?', function (req, res) {
 	find.file(req.query.file+'.pcap', storage, function(files) {
 	  if (files.length > 0) {
 		if (config.debug) console.log(files);
-		var q = 'SELECT * FROM cdr WHERE ID IN (SELECT cdr_id FROM cdr_next WHERE fbasename= "'+req.query.file+'")';
-		connection.query(q, function (error, results, fields) {
+		var q = 'SELECT * FROM cdr WHERE ID IN (SELECT cdr_id FROM cdr_next WHERE fbasename = ?)';
+		connection.query(q, [req.query.file], function (error, results, fields) {
 		  if (error) { res.send(404) }
 		  else {
 			  results.forEach(function(res){ res.callid = req.query.file });
