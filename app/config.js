@@ -1,7 +1,9 @@
+var crypto = require('crypto');
+
 var config = {
   backend: 'http://localhost:9080/api/v3/agent/subscribe',
   service: {
-	"uuid": Math.random().toString(36).substring(7),
+	"uuid": crypto.randomBytes(16).toString('hex'),
 	"host":"PUBLIC_IP_HERE",
 	"port": 18088,
 	"protocol": "http",
